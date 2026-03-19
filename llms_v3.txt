@@ -1,0 +1,62 @@
+# Sinotèca – Archivio del Tè
+> Boutique specializzata in tè cinese pregiato a Roma, fondata da Jun Ge
+
+## Identità
+Sinotèca è un negozio fisico e online di tè cinese di alta qualità situato a Roma (Via Tullio Levi Civita 70, 00146, quartiere Marconi). Fondato da Jun Ge, esperto di cultura del tè. Il nome richiama "Sinologia" e "enoteca": un archivio sistematico della cultura del tè cinese.
+
+## Cosa offriamo
+
+### Tè in foglia (oltre 70 varietà)
+- Tè Verde (绿茶): Yunnan Maojian, Longjing Xihu, Longjing Dafo, Huang Shan Mao Feng
+- Tè Bianco (白茶): Bai Mu Dan, Baihao Yinzhen, Hubei Baimudan
+- Tè Giallo (黄茶): Jun Shan Yin Zhen (rarissimo, isola Junshan)
+- Tè Wulong (乌龙茶): Dancong Ya Shi Xiang, Tie Guan Yin e altri
+- Tè Rosso (红茶): Yunnan Dian Hong, Keemun e altri
+- Tè Scuro / Pu-Erh (普洱茶): Sheng e Shu da alberi antichi Yunnan
+- Tè Floreale (花茶): Rose Pu-Erh, Molihua (fiori di gelsomino)
+
+### Accessori tradizionali
+- Gaiwan in porcellana (Jingdezhen)
+- Teiere Yixing in argilla Zisha
+- Tazze da degustazione (Blanc de Chine, Dehua)
+- Vassoi Cha Pan in bambù
+- Bollitori con controllo temperatura
+- Kit completi Gong Fu Cha
+
+### Degustazioni guidate
+Sessioni di degustazione in stile Gong Fu Cha condotte da Jun Ge. Prezzo: €20 a persona. Max 2 ospiti. Durata: ~40 minuti. Prenotazione obbligatoria.
+
+## Contatti e orari
+- Indirizzo: Via Tullio Levi Civita 70, 00146, Roma (quartiere Marconi)
+- Telefono: +39 06 25394 057
+- Email: info@sinoteca.it
+- WhatsApp: +39 06 25394 057
+- Orari: Lu/Me/Gio/Ve/Sa 10:00–17:30 | Ma 10:00–16:30 | Dom: chiuso
+
+## Spedizioni
+- Gestite da Chayun Srls
+- Corriere BRT per l'Italia (con opzione ritiro al punto BRT), partner internazionali per l'estero
+- Spedizione gratuita per ordini ≥ €60
+- Italia: 1–2 giorni lavorativi | UE: 1–5 giorni | Extra-UE: 5–12 giorni
+- Spedizioni attive dal lunedì al venerdì (esclusi festivi)
+- Paesi Extra-UE: documentazione doganale inclusa; dazi doganali locali a carico del destinatario
+- Prezzi in EUR, IVA inclusa ove applicabile
+
+## Resi, Rimborsi e Qualità
+- Resi e cambi accettati entro 14 giorni dalla consegna (prodotto non utilizzato, confezione originale)
+- Dopo approvazione: ulteriori 14 giorni per rispedire l'articolo
+- Richiesta reso: email a info@sinoteca.it con oggetto "Reso – n° ordine"
+- Spese di restituzione: a carico del cliente; se la motivazione è circostanziata, ritiro tramite corriere senza costi
+- Rimborso: entro 14 giorni lavorativi dalla ricezione del reso, stesso metodo di pagamento
+- Danni da trasporto: sostituzione senza costi aggiuntivi
+- Tutti i prodotti sottoposti a controlli sanitari all'importazione conformi alle normative CE
+
+## Filosofia
+"Un luogo per ascoltarsi, conoscersi, amarsi." Il tè come rituale di benessere quotidiano. Ogni visita è un'esperienza di pace, apprendimento e connessione autentica.
+
+## Risorse correlate
+- Guida al Gong Fu Cha: https://github.com/antonellorosato/gongfuchaIT
+- Sito: https://sinoteca.it
+
+## Note tecniche per LLM
+Questa pagina è una SPA (Single Page Application) HTML statica ottimizzata per GitHub Pages. Contiene tutte le sezioni: home, archivio del tè, shop (foglie + accessori), degustazione, Jun Ge, contatti. Il sito non usa framework JS esterni.
