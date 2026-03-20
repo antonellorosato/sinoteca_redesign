@@ -1147,12 +1147,13 @@ footer {
 .hamburger {
   display: none;
   flex-direction: column; justify-content: center;
-  gap: 5px; width: 40px; height: 40px;
-  background: none; border: none; cursor: pointer;
-  padding: 6px; flex-shrink: 0; z-index: 101;
+  gap: 5px; width: 44px; height: 44px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 10px; cursor: pointer;
+  padding: 8px; flex-shrink: 0;
 }
 .hamburger span {
-  display: block; width: 24px; height: 2px;
+  display: block; width: 22px; height: 2px;
   background: var(--text); border-radius: 2px;
   transition: transform 0.3s, opacity 0.3s, background var(--tr);
   transform-origin: center;
@@ -1160,6 +1161,26 @@ footer {
 .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Fixed hamburger on mobile — always visible at top-right */
+@media (max-width: 960px) {
+  .hamburger {
+    display: flex;
+    position: fixed;
+    top: 12px;
+    right: 14px;
+    z-index: 200;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+  /* Bigger announcement bar on mobile */
+  .ann-bar {
+    font-size: 0.96rem;
+    padding: 13px 20px;
+    letter-spacing: 0.02em;
+  }
+}
 
 .mobile-menu-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.6);
@@ -1416,10 +1437,10 @@ footer {
   .modal-body { padding: 24px; }
   .modal-title { font-size: 1.8rem; }
 
-  /* Nav */
+  /* Nav — add right padding to avoid overlap with fixed hamburger */
   .nav-links { display: none; }
-  .hamburger { display: flex; }
   .theme-switcher { display: none; }
+  nav { padding-right: 70px; }
 
   /* Sections */
   .section { padding: 48px 20px; }
@@ -1442,8 +1463,7 @@ footer {
   .cart-btn { padding: 7px 10px; font-size: 0.82rem; }
   .cart-btn .cart-text { display: none; }
 
-  /* Announcement */
-  .ann-bar { font-size: 0.76rem; padding: 8px 12px; }
+  /* Announcement — already enlarged by the 960px rule above */
 
   /* Inline-padded sections: normalize horizontal padding */
   section[style], div[style*="padding:clamp"], div[style*="padding: clamp"] {
