@@ -1142,25 +1142,383 @@ footer {
 }
 
 /* ============================================================
-   RESPONSIVE
+   HAMBURGER + MOBILE MENU
+============================================================ */
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center;
+  gap: 5px; width: 40px; height: 40px;
+  background: none; border: none; cursor: pointer;
+  padding: 6px; flex-shrink: 0; z-index: 101;
+}
+.hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: var(--text); border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s, background var(--tr);
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 98; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s; backdrop-filter: blur(4px);
+}
+.mobile-menu-overlay.open { opacity: 1; pointer-events: all; }
+
+.mobile-menu {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: min(320px, 88vw);
+  background: var(--bg2); border-right: 1px solid var(--border2);
+  z-index: 99; display: flex; flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.mobile-menu-head .nav-logo { font-size: 1.4rem; }
+.mobile-menu-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text2); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.mobile-nav-links { list-style: none; padding: 16px 0; flex: 1; }
+.mobile-nav-links li { border-bottom: 1px solid var(--border); }
+.mobile-nav-links li a,
+.mobile-nav-links li button {
+  display: block; width: 100%;
+  padding: 16px 24px; text-align: left;
+  font-family: 'Lora', serif; font-size: 1.05rem;
+  letter-spacing: 0.04em; color: var(--text2);
+  background: none; border: none; cursor: pointer;
+  transition: color var(--tr), background var(--tr);
+}
+.mobile-nav-links li a:hover,
+.mobile-nav-links li button:hover { color: var(--accent); background: var(--bg3); }
+.mobile-nav-links li a.active,
+.mobile-nav-links li button.active { color: var(--accent); }
+.mobile-nav-sub {
+  padding: 0 0 8px 0;
+  background: var(--bg3);
+}
+.mobile-nav-sub a {
+  display: block; padding: 10px 24px 10px 36px;
+  font-size: 0.9rem; color: var(--text3);
+  transition: color var(--tr);
+}
+.mobile-nav-sub a:hover { color: var(--accent); }
+.mobile-menu-footer {
+  padding: 20px 24px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;
+}
+.mobile-theme-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 0;
+}
+.mobile-theme-row span { font-size: 0.85rem; color: var(--text3); font-family: 'Lora', serif; }
+
+/* ============================================================
+   BLOG PAGE
+============================================================ */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+}
+.blog-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
+  transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr);
+  display: flex; flex-direction: column;
+}
+.blog-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--border2); }
+.blog-card-thumb {
+  height: 200px; background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.blog-card-thumb-char {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 6rem; color: var(--text); opacity: 0.1; line-height: 1;
+  transition: opacity var(--tr), transform var(--tr);
+  user-select: none;
+}
+.blog-card:hover .blog-card-thumb-char { opacity: 0.2; transform: scale(1.06); }
+.blog-card-cat {
+  position: absolute; top: 14px; left: 14px;
+  background: var(--accent); color: #fff;
+  font-size: 0.7rem; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 20px;
+}
+.blog-card-body { padding: 22px 22px 26px; flex: 1; display: flex; flex-direction: column; }
+.blog-card-meta {
+  font-size: 0.76rem; color: var(--text3);
+  letter-spacing: 0.06em; margin-bottom: 10px;
+  display: flex; gap: 14px;
+}
+.blog-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 600; color: var(--text);
+  line-height: 1.25; margin-bottom: 12px;
+}
+.blog-card-excerpt {
+  font-size: 0.88rem; color: var(--text2); line-height: 1.7;
+  flex: 1; margin-bottom: 18px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.blog-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--border); padding-top: 14px;
+}
+.blog-card-author { font-size: 0.8rem; color: var(--text3); }
+.blog-card-author strong { color: var(--text2); }
+.blog-read-more {
+  font-size: 0.82rem; color: var(--accent); font-family: 'Lora', serif;
+  letter-spacing: 0.06em; transition: color var(--tr);
+}
+.blog-card:hover .blog-read-more { color: var(--gold); }
+
+/* Article full view */
+.article-view {
+  display: none; max-width: 780px; margin: 0 auto;
+  padding: clamp(40px,6vw,80px) clamp(20px,6vw,80px);
+}
+.article-view.active { display: block; animation: fadeIn 0.4s ease; }
+.article-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: var(--text3); margin-bottom: 40px;
+  cursor: pointer; transition: color var(--tr); font-family: 'Lora', serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.article-back:hover { color: var(--accent); }
+.article-header { margin-bottom: 40px; }
+.article-cat-badge {
+  display: inline-block; background: var(--accent); color: #fff;
+  font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
+}
+.article-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700;
+  color: var(--text); line-height: 1.12; margin-bottom: 18px;
+}
+.article-meta {
+  display: flex; flex-wrap: wrap; gap: 18px;
+  font-size: 0.8rem; color: var(--text3); margin-bottom: 32px;
+}
+.article-hero-thumb {
+  width: 100%; height: 280px; background: var(--bg3);
+  border-radius: var(--radius-lg); display: flex;
+  align-items: center; justify-content: center;
+  margin-bottom: 40px; overflow: hidden;
+}
+.article-hero-glyph {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 8rem; color: var(--text); opacity: 0.1; line-height: 1;
+}
+.article-body { font-size: 1.02rem; color: var(--text2); line-height: 1.9; }
+.article-body h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem; color: var(--text); margin: 40px 0 16px; font-weight: 600;
+}
+.article-body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; color: var(--gold); margin: 30px 0 12px; font-weight: 600;
+}
+.article-body p { margin-bottom: 20px; }
+.article-body strong { color: var(--text); }
+.article-body blockquote {
+  border-left: 3px solid var(--gold); padding-left: 22px;
+  margin: 28px 0; color: var(--text2);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-style: italic; line-height: 1.6;
+}
+.article-cta {
+  margin-top: 48px; padding: 32px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); text-align: center;
+}
+.article-cta h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; margin-bottom: 10px; }
+.article-cta p { font-size: 0.9rem; color: var(--text2); margin-bottom: 20px; }
+.blog-list-view { display: block; }
+.blog-list-view.hidden { display: none; }
+
+/* ============================================================
+   RESPONSIVE — FULL MOBILE OVERHAUL
 ============================================================ */
 @media (max-width: 960px) {
+  /* Layout stacks */
   .hero, .archivio-grid, .degu-hero, .jun-hero,
-  .modal-grid, .degu-booking-card, .contacts-grid { grid-template-columns: 1fr; }
-  .hero-visual { min-height: 320px; }
-  .cat-map, .values-grid { grid-template-columns: repeat(2,1fr); }
+  .modal-grid, .degu-booking-card,
+  .contacts-grid { grid-template-columns: 1fr; }
+  /* Fix sections that have inline grid */
+  section [style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  .cat-map { grid-template-columns: repeat(2,1fr); }
+  .values-grid { grid-template-columns: 1fr 1fr; }
   .degu-steps { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .brewing-grid { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
   .intro-strip-inner { grid-template-columns: 1fr; gap: 28px; }
+  #shop-info-strip > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+
+  /* Hero */
+  .hero { min-height: auto; }
+  .hero-content { padding: 52px 24px; }
+  .hero-visual { min-height: 260px; order: -1; }
+  .hero-visual img { max-height: 280px; }
+
+  /* Archivio hero */
+  .archivio-hero { min-height: auto; padding: 52px 24px; }
+  .archivio-hero::before { display: none; }
+  .archivio-bg-char { display: none; }
+  .archivio-block { padding: 36px 24px; }
+
+  /* Degustazione */
+  .degu-content { padding: 48px 24px; }
+  .degu-visual { min-height: 200px; padding: 40px 24px; }
+
+  /* Jun Ge */
+  .jun-content { padding: 48px 24px; }
+  .jun-visual { min-height: 280px; }
+
+  /* Modal */
   .modal-visual { border-radius: 16px 16px 0 0; min-height: 200px; }
-  #shop-info-strip { grid-template-columns: 1fr; }
+  .modal-body { padding: 24px; }
+  .modal-title { font-size: 1.8rem; }
+
+  /* Nav */
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .theme-switcher { display: none; }
+
+  /* Sections */
+  .section { padding: 48px 20px; }
+
+  /* Shop info strip inner grid */
+  #shop-info-strip .inner-grid { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 600px) {
-  .footer-grid { grid-template-columns: 1fr; }
-  .cat-map { grid-template-columns: repeat(2,1fr); }
-  .hero-ctas, .social-grid { flex-direction: column; grid-template-columns: 1fr; }
+  :root { --nav-h: 60px; }
+
+  /* Typography */
+  h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+  h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  body { font-size: 17px; }
+
+  /* Nav */
+  nav { padding: 0 16px; gap: 12px; }
+  .nav-logo { font-size: 1.4rem; }
+  .cart-btn { padding: 7px 12px; font-size: 0.82rem; }
+
+  /* Announcement */
+  .ann-bar { font-size: 0.78rem; padding: 8px 14px; }
+
+  /* Hero */
+  .hero { grid-template-columns: 1fr; }
+  .hero-content { padding: 44px 20px; }
+  .hero-visual { min-height: 220px; }
+  .hero h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
+  .hero-sub { font-size: 1rem; }
+  .hero-ctas { flex-direction: column; gap: 10px; }
+  .hero-ctas .btn { width: 100%; justify-content: center; }
+
+  /* Sections */
+  .section { padding: 40px 16px; }
+  .section-header { margin-bottom: 32px; }
+
+  /* Product grid */
+  .product-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+
+  /* Cat map */
+  .cat-map { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cat-tile { padding: 18px 14px; }
+  .cat-tile-glyph { font-size: 1.6rem; }
+  .cat-tile-name { font-size: 1rem; }
+
+  /* Values */
+  .values-grid { grid-template-columns: 1fr; }
+
+  /* Degu steps */
+  .degu-steps { grid-template-columns: 1fr; }
+  .degu-booking-card { padding: 28px 20px; }
+  .degu-booking-price { font-size: 3.5rem; }
+
+  /* Filter bar */
+  .filter-bar { gap: 7px; }
+  .search-bar { max-width: 100%; }
+  .filter-chip { font-size: 0.8rem; padding: 6px 14px; }
+
+  /* Shop tabs */
+  .shop-tabs { width: 100%; }
+  .shop-tab { flex: 1; padding: 12px 10px; font-size: 0.88rem; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .footer-links { flex-wrap: wrap; gap: 14px; }
+
+  /* Modal */
+  .modal { max-height: 95vh; border-radius: 14px 14px 0 0;
+           margin-bottom: 0; align-self: flex-end; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal-grid { grid-template-columns: 1fr; }
+  .modal-visual { display: none; }
+  .modal-body { padding: 24px 20px 32px; }
+  .modal-price { font-size: 2rem; }
+
+  /* Cart drawer */
+  :root { --cart-w: 100vw; }
+  .cart-drawer { border-left: none; border-top: 1px solid var(--border2);
+                  border-radius: 14px 14px 0 0; }
+
+  /* Newsletter */
+  .newsletter { padding: 40px 20px; gap: 24px; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-form input { min-width: auto; width: 100%; }
+  .newsletter-form .btn { width: 100%; justify-content: center; }
+
+  /* Social grid */
+  .social-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Contacts */
+  .contacts-hero { padding: 48px 20px 36px; }
+  .contacts-block { padding: 24px 20px; }
+
+  /* Archivio */
+  .archivio-hero { padding: 44px 20px; }
+  .archivio-block { padding: 32px 20px; }
+  .archivio-full-bleed { padding: 44px 20px; }
+
+  /* Jun Ge */
+  .jun-hero { grid-template-columns: 1fr; }
+  .jun-visual { min-height: 240px; }
+  .jun-content { padding: 36px 20px; }
+  .jun-quote { font-size: 1.3rem; }
+  .jun-avatar { width: 140px; height: 140px; }
+  .jun-avatar-glyph { font-size: 3.5rem; }
+
+  /* Blog */
+  .article-view { padding: 32px 16px; }
+  .article-title { font-size: 1.8rem; }
+  .article-body { font-size: 0.96rem; }
+
+  /* Intro strip */
+  .intro-strip { padding: 40px 20px; }
+  .intro-strip-inner { grid-template-columns: 1fr; gap: 24px; }
 }
 </style>
 </head>
@@ -1191,7 +1549,8 @@ footer {
     <li><a href="#" onclick="navigate('degustazione')" id="nav-degustazione">Degustazione</a></li>
     <li><a href="#" onclick="navigate('junge')" id="nav-junge">Jun Ge</a></li>
     <li><a href="#" onclick="navigate('contatti')" id="nav-contatti">Contatti</a></li>
-    <li><a href="https://antonellorosato.github.io/gongfuchaIT/" target="_blank" rel="noopener" style="color:var(--gold);">Guida ↗</a></li>
+    <li><a href="#" onclick="navigate('blog')" id="nav-blog">Blog</a></li>
+    <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida ↗</a></li>
   </ul>
 
   <div class="nav-actions">
@@ -1203,8 +1562,46 @@ footer {
       Carrello
       <span class="cart-badge" id="cart-badge">0</span>
     </button>
+    <button class="hamburger" id="hamburger" onclick="openMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu-overlay" id="mobile-overlay" onclick="closeMobileMenu()"></div>
+<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Menu mobile">
+  <div class="mobile-menu-head">
+    <div class="nav-logo" onclick="closeMobileMenu();navigate('home');">Sinot<span>è</span>ca<small>Archivio del Tè</small></div>
+    <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Chiudi menu">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="#" onclick="closeMobileMenu();navigate('home');">Home</a></li>
+    <li><a href="#" onclick="closeMobileMenu();navigate('archivio');">L'Archivio del Tè</a></li>
+    <li>
+      <button onclick="toggleMobileSub('sub-shop')" style="width:100%;text-align:left;padding:16px 24px;font-family:'Lora',serif;font-size:1.05rem;letter-spacing:0.04em;color:var(--text2);background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+        Shop <span id="sub-shop-arrow">▾</span>
+      </button>
+      <div class="mobile-nav-sub" id="sub-shop" style="display:none;">
+        <a href="#" onclick="closeMobileMenu();navigate('shop','foglie');">Foglie di Tè</a>
+        <a href="#" onclick="closeMobileMenu();navigate('shop','accessori');">Accessori</a>
+        <a href="#" onclick="closeMobileMenu();navigate('shop','floreale');">Tè Floreale &amp; Tisane</a>
+      </div>
+    </li>
+    <li><a href="#" onclick="closeMobileMenu();navigate('degustazione');">Degustazione</a></li>
+    <li><a href="#" onclick="closeMobileMenu();navigate('junge');">Jun Ge</a></li>
+    <li><a href="#" onclick="closeMobileMenu();navigate('blog');">Blog</a></li>
+    <li><a href="#" onclick="closeMobileMenu();navigate('contatti');">Contatti</a></li>
+    <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
+  </ul>
+  <div class="mobile-menu-footer">
+    <div class="mobile-theme-row">
+      <span id="mobile-theme-label">Tema scuro</span>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambia tema"></button>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="closeMobileMenu();openCart();">Carrello <span id="mobile-cart-count">0</span></button>
+  </div>
+</div>
 
 <!-- ============================================================
      CART DRAWER
@@ -1543,7 +1940,7 @@ footer {
 
             <div style="padding:13px 0;border-bottom:1px solid var(--border);">
               <strong style="display:block;font-size:0.74rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;">Come richiedere un reso</strong>
-              <span style="font-size:0.95rem;color:var(--text2);">Scrivi a <a href="mailto:info@sinoteca.it" style="color:var(--accent);">info@sinoteca.it</a> con oggetto "Reso – n° ordine". Il modo più rapido per effettuare un cambio è restituire l'articolo e, una volta approvato il reso, procedere con un nuovo ordine separato.</span>
+              <span style="font-size:0.95rem;color:var(--text2);">Scrivi a <a href="/cdn-cgi/l/email-protection#61080f070e2112080f0e150402004f0815" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="e0898e868fa093898e8f94858381ce8994">[email&#160;protected]</span></a> con oggetto "Reso – n° ordine". Il modo più rapido per effettuare un cambio è restituire l'articolo e, una volta approvato il reso, procedere con un nuovo ordine separato.</span>
             </div>
 
             <div style="padding:13px 0;border-bottom:1px solid var(--border);">
@@ -1574,7 +1971,7 @@ footer {
       <!-- Note richieste particolari -->
       <div style="margin-top:20px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
         <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--accent);opacity:0.5;flex-shrink:0;">注</div>
-        <p style="font-size:0.9rem;color:var(--text2);line-height:1.7;flex:1;margin:0;">Per richieste particolari — confezioni regalo, note personalizzate, tempistiche specifiche — puoi lasciare un messaggio al momento dell'ordine o contattarci direttamente a <a href="mailto:info@sinoteca.it" style="color:var(--accent);">info@sinoteca.it</a>. Faremo il possibile per soddisfarla.</p>
+        <p style="font-size:0.9rem;color:var(--text2);line-height:1.7;flex:1;margin:0;">Per richieste particolari — confezioni regalo, note personalizzate, tempistiche specifiche — puoi lasciare un messaggio al momento dell'ordine o contattarci direttamente a <a href="/cdn-cgi/l/email-protection#abc2c5cdc4ebd8c2c5c4dfcec8ca85c2df" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="6a03040c052a190304051e0f090b44031e">[email&#160;protected]</span></a>. Faremo il possibile per soddisfarla.</p>
       </div>
 
     </div><!-- /shop-info-strip -->
@@ -1845,6 +2242,36 @@ footer {
 </div>
 
 <!-- ============================================================
+     BLOG PAGE
+============================================================ -->
+<div id="page-blog" class="page">
+
+  <!-- Blog list view -->
+  <div id="blog-list-view">
+    <section class="section">
+      <div class="section-header">
+        <span class="section-label">Cultura del Tè · Approfondimenti</span>
+        <h1 style="margin-bottom:8px;">Blog</h1>
+        <p style="font-size:1rem;color:var(--text2);max-width:560px;line-height:1.75;">Articoli, guide e riflessioni sul mondo del tè cinese. Dalla scelta delle foglie alle tecniche di infusione, dalla storia alle origini.</p>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="blog-grid" id="blog-grid">
+        <!-- rendered by JS -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Single article view -->
+  <div id="blog-article-view" style="display:none;">
+    <div class="article-view active" id="article-content">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================
      FOOTER
 ============================================================ -->
 <footer>
@@ -1861,7 +2288,8 @@ footer {
         <li><a href="#" onclick="navigate('shop','accessori')">Accessori</a></li>
         <li><a href="#" onclick="navigate('degustazione')">Degustazione</a></li>
         <li><a href="#" onclick="navigate('junge')">Jun Ge</a></li>
-        <li><a href="https://antonellorosato.github.io/gongfuchaIT/" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
+        <li><a href="#" onclick="navigate('blog')">Blog</a></li>
+        <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1985,7 +2413,132 @@ footer {
 ============================================================ -->
 <script>
 /* ============================================================
-   DATA
+   BLOG DATA
+============================================================ */
+const ARTICLES = [
+  {
+    id: 1,
+    title: "Come preparare il Gong Fu Cha a casa: guida completa per principianti",
+    slug: "gong-fu-cha-guida-principianti",
+    cat: "Tecnica",
+    catColor: "#5a8a50",
+    glyph: "功",
+    date: "12 Marzo 2025",
+    author: "Jun Ge",
+    readTime: "8 min",
+    excerpt: "Il Gong Fu Cha non è solo un metodo di preparazione: è una filosofia, un rituale che trasforma ogni infusione in un momento di presenza e consapevolezza. Scopri come ricrearlo a casa con gli strumenti giusti.",
+    keywords: ["gong fu cha", "preparazione tè", "teiera", "gaiwan", "infusione", "tè cinese casa"],
+    content: `
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+      <h2>Cos'è il Gong Fu Cha</h2>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
+
+      <blockquote>Il tè non è solo una bevanda. È un atto di cura verso sé stessi, un momento di quiete che si ritaglia nella giornata.</blockquote>
+
+      <h2>Gli strumenti necessari</h2>
+      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+
+      <h3>Il gaiwan</h3>
+      <p>Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
+
+      <h3>La teiera Yixing</h3>
+      <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores.</p>
+
+      <h2>La tecnica passo per passo</h2>
+      <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus.</p>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+
+      <h2>I tè più adatti al Gong Fu Cha</h2>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</p>
+      <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.</p>
+    `
+  },
+  {
+    id: 2,
+    title: "Sheng e Shu Pu-Erh: differenze, invecchiamento e come scegliere il tuo primo Pu-Erh",
+    slug: "sheng-shu-puerh-differenze-guida",
+    cat: "Varietà",
+    catColor: "#6b5a3a",
+    glyph: "普",
+    date: "28 Febbraio 2025",
+    author: "Jun Ge",
+    readTime: "10 min",
+    excerpt: "Il Pu-Erh è il tè più frainteso e al tempo stesso più affascinante della tradizione cinese. Due lavorazioni radicalmente diverse — sheng e shu — producono esperienze di tazza opposte. Una guida per orientarsi.",
+    keywords: ["pu-erh", "sheng", "shu", "tè fermentato", "yunnan", "invecchiamento tè", "tè scuro"],
+    content: `
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+
+      <h2>Cosa rende unico il Pu-Erh</h2>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo nemo.</p>
+
+      <blockquote>Un Pu-Erh invecchiato bene racconta il tempo: ogni anno di maturazione aggiunge strati di complessità che nessun'altra lavorazione può replicare.</blockquote>
+
+      <h2>Sheng Pu-Erh: il grezzo</h2>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum.</p>
+      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+
+      <h3>Profilo aromatico e gusto</h3>
+      <p>Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio.</p>
+
+      <h2>Shu Pu-Erh: il maturo accelerato</h2>
+      <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus.</p>
+      <p>Ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+
+      <h2>Come scegliere il primo Pu-Erh</h2>
+      <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio.</p>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+
+      <h2>Come conservarlo</h2>
+      <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+    `
+  },
+  {
+    id: 3,
+    title: "I 5 tè verdi cinesi più pregiati: come riconoscerli e come prepararli al meglio",
+    slug: "cinque-te-verdi-cinesi-pregiati",
+    cat: "Selezione",
+    catColor: "#3d6b32",
+    glyph: "綠",
+    date: "10 Febbraio 2025",
+    author: "Jun Ge",
+    readTime: "7 min",
+    excerpt: "Il tè verde cinese è il più vasto e diversificato tra le categorie. Da Longjing a Maojian, da Mao Feng a Biluochun: cinque varietà che ogni appassionato dovrebbe conoscere, con le differenze di terroir, raccolta e lavorazione.",
+    keywords: ["tè verde cinese", "longjing", "mao feng", "biluochun", "maojian", "varietà tè verde", "tè primaverile"],
+    content: `
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Il tè verde rappresenta la categoria più antica e più praticata in tutta la Cina, con differenze enormi tra una regione e l'altra.</p>
+
+      <h2>Perché il tè verde cinese è così diverso da quello giapponese</h2>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto.</p>
+
+      <h2>1. Longjing — Il Pozzo del Drago</h2>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+
+      <blockquote>Il Longjing del Lago dell'Ovest è considerato il tè verde per eccellenza: raccolto a mano prima di Qingming, lavorato in padella fino alla forma piatta caratteristica.</blockquote>
+
+      <h2>2. Huang Shan Mao Feng — La Punta Pelosa della Montagna Gialla</h2>
+      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+      <p>Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+
+      <h2>3. Biluochun — Chiocciola di Giada della Primavera</h2>
+      <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+      <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+
+      <h2>4. Yunnan Maojian — La Punta Pelosa dello Yunnan</h2>
+      <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus.</p>
+
+      <h2>5. Anji Baicha — Il Tè Bianco di Anji</h2>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.</p>
+      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati.</p>
+    `
+  }
+];
+
+/* ============================================================
+   TEA DATA (repeated for completeness)
 ============================================================ */
 const TEAS = [
   { id:1, name:"Yunnan Maojian", zh:"云南毛尖 野生", glyph:"茶", dotColor:"#5a8a50",
@@ -1999,7 +2552,7 @@ const TEAS = [
   { id:2, name:"Wulong Dancong", zh:"鸭屎香 单丛", glyph:"龍", dotColor:"#4a7ca0",
     cat:"wulong", catLabel:"Tè Wulong",
     origin:"Chaozhou, Guangdong", harvest:"Aprile 2025", cultivar:"Ya Shi Xiang",
-    desc:"Wulong di alta montagna con ossidazione al 60%. Profilo aromatico straordinariamente complesso: fiori di magnolia, note fruttate di pesca e agrumi, con finale lungo e mielato. La preparazione Gong Fu valorizza la progressione aromatica infusione dopo infusione.",
+    desc:"Wulong di alta montagna con ossidazione al 60%. Profilo aromatico straordinariamente complesso: fiori di magnolia, note fruttate di pesca e agrumi, con finale lungo e mielato.",
     aromas:["Magnolia","Pesca","Miele d'acacia","Agrumi","Orchidea"],
     price:18,
     brewing:{ orientale:["5 g per 100 ml","90°C","10–15 sec","Fino a 8 infusioni"], occidentale:["3 g per 300 ml","88°C","3 minuti","1–2 infusioni"] },
@@ -2007,7 +2560,7 @@ const TEAS = [
   { id:3, name:"Yunnan Dian Hong", zh:"云南滇红", glyph:"紅", dotColor:"#8b3a3a",
     cat:"rosso", catLabel:"Tè Rosso",
     origin:"Fengqing, Yunnan", harvest:"Primavera 2025", cultivar:"Dayezhong",
-    desc:"Tè rosso classico dello Yunnan, noto per la sua dolcezza naturale e il profilo maltato. Foglie dorate che producono un infuso ambrato con corpo pieno. Note di malto, miele e cacao. Eccellente in purezza o con un goccio di latte.",
+    desc:"Tè rosso classico dello Yunnan, noto per la sua dolcezza naturale e il profilo maltato. Note di malto, miele e cacao.",
     aromas:["Malto","Miele","Cacao amaro","Patata dolce"],
     price:14,
     brewing:{ orientale:["4 g per 100 ml","95°C","15–20 sec","Fino a 6 infusioni"], occidentale:["3 g per 250 ml","95°C","3 minuti","2 infusioni"] },
@@ -2015,7 +2568,7 @@ const TEAS = [
   { id:4, name:"Sheng Pu-Erh 2022", zh:"生普洱 2022", glyph:"普", dotColor:"#6b5a3a",
     cat:"scuro", catLabel:"Tè Scuro",
     origin:"Menghai, Yunnan", harvest:"Primavera 2022", cultivar:"Gushu (alberi antichi)",
-    desc:"Pu-Erh grezzo da alberi antichi del Xishuangbanna. Con tre anni di invecchiamento ha sviluppato note più morbide mantenendo la caratteristica vivacità. Infuso giallo-oro, amaro piacevole con lunga dolcezza in gola (huigan). Un investimento per gli appassionati.",
+    desc:"Pu-Erh grezzo da alberi antichi del Xishuangbanna. Infuso giallo-oro, amaro piacevole con lunga dolcezza in gola.",
     aromas:["Tabacco verde","Foresta umida","Fiori bianchi","Pietra","Agrume"],
     price:22,
     brewing:{ orientale:["6 g per 100 ml","95°C","10 sec (risciacquo)","Fino a 12 infusioni"] },
@@ -2023,7 +2576,7 @@ const TEAS = [
   { id:5, name:"Bai Mu Dan", zh:"白牡丹", glyph:"白", dotColor:"#c4a261",
     cat:"bianco", catLabel:"Tè Bianco",
     origin:"Fuding, Fujian", harvest:"Marzo 2025", cultivar:"Da Bai",
-    desc:"Tè bianco tradizionale del Fujian composto da gemme e prime foglie con abbondanti peli argentati. Infuso paglierino tenue, gusto morbido e floreale. La lavorazione minima preserva intatti polifenoli e profumi delicati. Ideale per chi si avvicina ai tè bianchi.",
+    desc:"Tè bianco tradizionale del Fujian. Infuso paglierino tenue, gusto morbido e floreale.",
     aromas:["Fieno","Camomilla","Melon bianco","Pesca","Latte caldo"],
     price:13,
     brewing:{ orientale:["3 g per 100 ml","80°C","20–30 sec","Fino a 6 infusioni"], occidentale:["4 g per 300 ml","75°C","4 minuti","1–2 infusioni"], freddo:["6 g / 1 L","Acqua fredda","8 ore in frigo"] },
@@ -2031,7 +2584,7 @@ const TEAS = [
   { id:6, name:"Huang Shan Mao Feng", zh:"黄山毛峰", glyph:"峰", dotColor:"#5a8a50",
     cat:"verde", catLabel:"Tè Verde",
     origin:"Huizhou, Anhui", harvest:"Qingming 2025", cultivar:"Mao Feng",
-    desc:"Uno dei tè verdi più celebri della Cina, raccolto prima di Qingming sulle montagne Gialle. Gemme e foglie avvolte in peli bianchi. Infuso cristallino, gusto rotondo, vegetale e leggermente nocciolato. Persistenza lunga e piacevole.",
+    desc:"Uno dei tè verdi più celebri della Cina. Infuso cristallino, gusto rotondo, vegetale e nocciolato.",
     aromas:["Castagna","Vegetale dolce","Orchidea","Miele","Bambu"],
     price:16,
     brewing:{ orientale:["3 g per 100 ml","80°C","20 sec","Fino a 4 infusioni"], occidentale:["3 g per 200 ml","78°C","2 minuti","2 infusioni"] },
@@ -2039,7 +2592,7 @@ const TEAS = [
   { id:7, name:"Rose Pu-Erh Blend", zh:"玫瑰普洱", glyph:"花", dotColor:"#a05070",
     cat:"floreale", catLabel:"Tè Floreale",
     origin:"Yunnan / Shandong", harvest:"2024", cultivar:"Shu Pu-Erh + petali di rosa",
-    desc:"Blend morbido di Pu-Erh maturo (shu) con petali di rosa essiccati. Il carattere terroso si sposa con la dolcezza floreale. Tazza bordeaux profonda, gusto avvolgente e rilassante. Ideale la sera.",
+    desc:"Blend morbido di Pu-Erh maturo con petali di rosa essiccati. Tazza bordeaux profonda, gusto avvolgente.",
     aromas:["Rosa","Terra umida","Cioccolato fondente","Legno dolce"],
     price:12,
     brewing:{ orientale:["5 g per 100 ml","95°C","15 sec","Fino a 5 infusioni"], occidentale:["4 g per 300 ml","92°C","3 minuti","2 infusioni"] },
@@ -2047,7 +2600,7 @@ const TEAS = [
   { id:8, name:"Jun Shan Yin Zhen", zh:"君山银针", glyph:"君", dotColor:"#c4a261",
     cat:"giallo", catLabel:"Tè Giallo",
     origin:"Isola Junshan, Hunan", harvest:"Aprile 2025", cultivar:"Junshan selvatici",
-    desc:"Uno dei tè più rari al mondo: solo le gemme vengono raccolte sull'isola Junshan. La lavorazione tradizionale con 'men huang' produce un infuso dorato, dolcissimo, con note di mais e castagna. Esperienza rarissima.",
+    desc:"Uno dei tè più rari al mondo. Infuso dorato, dolcissimo, con note di mais e castagna.",
     aromas:["Mais dolce","Castagna","Miele di fiori","Bambu"],
     price:32,
     brewing:{ orientale:["4 g per 100 ml","75°C","30 sec","Fino a 4 infusioni"], occidentale:["3 g per 250 ml","72°C","2.5 minuti","1–2 infusioni"] },
@@ -2055,42 +2608,18 @@ const TEAS = [
 ];
 
 const ACCESSORIES = [
-  { id:101, name:"Gaiwan in Porcellana", zh:"盖碗", glyph:"碗", dotColor:"#e6e0d2",
-    cat:"teiere", catLabel:"Teiere e Gaiwan",
-    origin:"Jingdezhen, Jiangxi",
-    desc:"Gaiwan tradizionale in porcellana bianca di Jingdezhen. Capacità 150 ml. Ideale per Gong Fu Cha: permette di apprezzare il colore dell'infuso e il profumo delle foglie. Resistente al calore, facile da pulire.",
-    aromas:[], price:24, brewing:null, conf:"150 ml" },
-  { id:102, name:"Teiera Yixing in Zisha", zh:"紫砂壶", glyph:"壺", dotColor:"#8b5a3a",
-    cat:"teiere", catLabel:"Teiere e Gaiwan",
-    origin:"Yixing, Jiangsu",
-    desc:"Autentica teiera in argilla Zisha di Yixing, forma Shui Ping. L'argilla porosa assorbe nel tempo i sapori del tè, migliorando ogni infusione. Capacità 120 ml. Consigliata per Wulong e Pu-Erh.",
-    aromas:[], price:65, brewing:null, conf:"120 ml" },
-  { id:103, name:"Set 4 Tazze da Degustazione", zh:"品茗杯", glyph:"杯", dotColor:"#c4a261",
-    cat:"tazze", catLabel:"Tazze",
-    origin:"Dehua, Fujian",
-    desc:"Set di 4 tazze in porcellana Blanc de Chine di Dehua. Forma a campana, capacità 30 ml. La porcellana sottilissima non altera il sapore e mostra perfettamente il colore dell'infuso.",
-    aromas:[], price:28, brewing:null, conf:"4 × 30 ml" },
-  { id:104, name:"Vassoio Cha Pan in Bambù", zh:"茶盘", glyph:"盤", dotColor:"#6b7a50",
-    cat:"altri", catLabel:"Accessori",
-    origin:"Produzione artigianale",
-    desc:"Vassoio da tè in bambù trattato con sistema di drenaggio incorporato. Dimensioni 35x22 cm. Permette di versare liberamente l'acqua di risciacquo durante la cerimonia Gong Fu Cha.",
-    aromas:[], price:38, brewing:null, conf:"35x22 cm" },
-  { id:105, name:"Bollitore con Controllo Temperatura", zh:"电热水壶", glyph:"水", dotColor:"#4a7ca0",
-    cat:"altri", catLabel:"Accessori",
-    origin:"",
-    desc:"Bollitore elettrico con controllo preciso della temperatura (70-100 gradi) e funzione keep-warm. Capacità 0.8 L, beccuccio a collo di cigno per versamento preciso. Indispensabile per valorizzare ogni varietà di tè.",
-    aromas:[], price:55, brewing:null, conf:"0.8 L" },
-  { id:106, name:"Kit Gong Fu Cha", zh:"功夫茶具套装", glyph:"功", dotColor:"#5a8a50",
-    cat:"altri", catLabel:"Kit completo",
-    origin:"Varie regioni",
-    desc:"Kit completo per iniziare la pratica del Gong Fu Cha: 1 gaiwan 150 ml, 2 tazze 30 ml, 1 brocca di raccolta 200 ml, 1 filtro in acciaio, 1 cucchiaino da tè. Confezionato in scatola regalo.",
-    aromas:[], price:48, brewing:null, conf:"Set 6 pezzi" }
+  { id:101, name:"Gaiwan in Porcellana", zh:"盖碗", glyph:"碗", dotColor:"#e6e0d2", cat:"teiere", catLabel:"Teiere e Gaiwan", origin:"Jingdezhen, Jiangxi", desc:"Gaiwan tradizionale in porcellana bianca. Capacità 150 ml. Ideale per Gong Fu Cha.", aromas:[], price:24, brewing:null, conf:"150 ml" },
+  { id:102, name:"Teiera Yixing in Zisha", zh:"紫砂壶", glyph:"壺", dotColor:"#8b5a3a", cat:"teiere", catLabel:"Teiere e Gaiwan", origin:"Yixing, Jiangsu", desc:"Autentica teiera in argilla Zisha di Yixing. Capacità 120 ml.", aromas:[], price:65, brewing:null, conf:"120 ml" },
+  { id:103, name:"Set 4 Tazze da Degustazione", zh:"品茗杯", glyph:"杯", dotColor:"#c4a261", cat:"tazze", catLabel:"Tazze", origin:"Dehua, Fujian", desc:"Set di 4 tazze in porcellana Blanc de Chine. Capacità 30 ml ciascuna.", aromas:[], price:28, brewing:null, conf:"4 x 30 ml" },
+  { id:104, name:"Vassoio Cha Pan in Bambù", zh:"茶盘", glyph:"盤", dotColor:"#6b7a50", cat:"altri", catLabel:"Accessori", origin:"Produzione artigianale", desc:"Vassoio da tè in bambù con sistema di drenaggio. Dim. 35x22 cm.", aromas:[], price:38, brewing:null, conf:"35x22 cm" },
+  { id:105, name:"Bollitore con Controllo Temperatura", zh:"电热水壶", glyph:"水", dotColor:"#4a7ca0", cat:"altri", catLabel:"Accessori", origin:"", desc:"Bollitore elettrico con controllo temperatura 70-100°C. Capacità 0.8 L.", aromas:[], price:55, brewing:null, conf:"0.8 L" },
+  { id:106, name:"Kit Gong Fu Cha", zh:"功夫茶具套装", glyph:"功", dotColor:"#5a8a50", cat:"altri", catLabel:"Kit completo", origin:"Varie regioni", desc:"Kit completo: gaiwan, 2 tazze, brocca, filtro, cucchiaino. In scatola regalo.", aromas:[], price:48, brewing:null, conf:"Set 6 pezzi" }
 ];
 
 const ALL_PRODUCTS = [...TEAS, ...ACCESSORIES];
 
 /* ============================================================
-   CART STATE
+   STATE
 ============================================================ */
 let cart = [];
 let currentProductId = null;
@@ -2098,27 +2627,30 @@ let activeCat = 'tutti';
 let activeAccCat = 'tutti';
 let activeShopTab = 'foglie';
 let searchQuery = '';
+let currentArticleId = null;
 
+/* ============================================================
+   CART
+============================================================ */
 function cartTotal() { return cart.reduce((s,i) => s + i.price * i.qty, 0); }
 function cartCount() { return cart.reduce((s,i) => s + i.qty, 0); }
 
 function updateCartUI() {
   const count = cartCount();
   const total = cartTotal();
+  ['cart-badge','mobile-cart-count'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = count; }
+  });
   const badge = document.getElementById('cart-badge');
-  if (badge) {
-    badge.textContent = count;
-    badge.classList.add('bump');
-    setTimeout(() => badge.classList.remove('bump'), 300);
-  }
+  if (badge) { badge.classList.add('bump'); setTimeout(() => badge.classList.remove('bump'), 300); }
   const cartTotalEl = document.getElementById('cart-total');
   if (cartTotalEl) cartTotalEl.textContent = '€' + total.toFixed(2).replace('.', ',');
   const diff = Math.max(0, 60 - total);
   const note = document.getElementById('cart-shipping-note');
-  if (note) {
-    if (diff <= 0) { note.innerHTML = 'Hai diritto alla <strong>spedizione gratuita!</strong>'; }
-    else { note.innerHTML = 'Aggiungi ancora <strong>€' + diff.toFixed(2).replace('.', ',') + '</strong> per la spedizione gratuita'; }
-  }
+  if (note) note.innerHTML = diff <= 0
+    ? 'Hai diritto alla <strong>spedizione gratuita!</strong>'
+    : 'Aggiungi ancora <strong>€' + diff.toFixed(2).replace('.', ',') + '</strong> per la spedizione gratuita';
   const footer = document.getElementById('cart-footer');
   if (footer) footer.style.display = count > 0 ? 'flex' : 'none';
   renderCartItems();
@@ -2161,8 +2693,7 @@ function addToCartById(id) {
   const product = ALL_PRODUCTS.find(p => p.id === id);
   if (!product) return;
   const existing = cart.find(i => i.id === id);
-  if (existing) { existing.qty++; }
-  else { cart.push({ id: product.id, name: product.name, price: product.price, glyph: product.glyph, catLabel: product.catLabel, qty: 1 }); }
+  if (existing) { existing.qty++; } else { cart.push({ id: product.id, name: product.name, price: product.price, glyph: product.glyph, catLabel: product.catLabel, qty: 1 }); }
   updateCartUI();
 }
 
@@ -2170,8 +2701,7 @@ function changeQty(id, delta) {
   const item = cart.find(i => i.id === id);
   if (!item) return;
   item.qty += delta;
-  if (item.qty <= 0) removeFromCart(id);
-  else updateCartUI();
+  if (item.qty <= 0) removeFromCart(id); else updateCartUI();
 }
 
 function removeFromCart(id) {
@@ -2184,16 +2714,14 @@ function openCart() {
   document.getElementById('cart-drawer').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeCart() {
   document.getElementById('cart-overlay').classList.remove('open');
   document.getElementById('cart-drawer').classList.remove('open');
   document.body.style.overflow = '';
 }
-
 function checkout() {
   if (cart.length === 0) return;
-  alert('Grazie per il tuo ordine! In un sito reale qui si procederebbe al pagamento. Totale: €' + cartTotal().toFixed(2));
+  alert('Grazie! In un sito reale qui si procederebbe al pagamento. Totale: €' + cartTotal().toFixed(2));
 }
 
 /* ============================================================
@@ -2201,7 +2729,7 @@ function checkout() {
 ============================================================ */
 function navigate(page, sub) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-links a, .nav-links button').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.nav-links a, .nav-links button, .mobile-nav-links a, .mobile-nav-links button').forEach(a => a.classList.remove('active'));
   const pageEl = document.getElementById('page-' + page);
   if (pageEl) pageEl.classList.add('active');
   const navEl = document.getElementById('nav-' + page);
@@ -2209,21 +2737,18 @@ function navigate(page, sub) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (page === 'home') renderHomeProducts();
   if (page === 'shop') {
-    renderShopProducts();
-    renderAccProducts();
-    if (sub === 'accessori') {
-      switchShopTab('accessori', document.getElementById('tab-accessori'));
-    } else {
+    renderShopProducts(); renderAccProducts();
+    if (sub === 'accessori') switchShopTab('accessori', document.getElementById('tab-accessori'));
+    else {
       switchShopTab('foglie', document.getElementById('tab-foglie'));
       if (sub && sub !== 'foglie') {
         activeCat = sub;
-        document.querySelectorAll('#shop-foglie .filter-chip').forEach(c => {
-          c.classList.toggle('active', c.textContent.trim().toLowerCase() === sub);
-        });
+        document.querySelectorAll('#shop-foglie .filter-chip').forEach(c => c.classList.toggle('active', c.textContent.trim().toLowerCase() === sub));
         renderShopProducts();
       }
     }
   }
+  if (page === 'blog') renderBlogList();
   return false;
 }
 
@@ -2234,38 +2759,55 @@ function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  const lbl = document.getElementById('theme-label');
-  if (lbl) lbl.textContent = isDark ? 'Tema chiaro' : 'Tema scuro';
+  const label = isDark ? 'Tema chiaro' : 'Tema scuro';
+  ['theme-label','mobile-theme-label'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.textContent = label;
+  });
 }
 
 /* ============================================================
-   RENDER PRODUCTS
+   MOBILE MENU
+============================================================ */
+function openMobileMenu() {
+  document.getElementById('mobile-menu').classList.add('open');
+  document.getElementById('mobile-overlay').classList.add('open');
+  document.getElementById('hamburger').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleMobileSub(id) {
+  const el = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  if (!el) return;
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.textContent = isOpen ? '▾' : '▴';
+}
+
+/* ============================================================
+   PRODUCTS
 ============================================================ */
 function renderHomeProducts() {
   const el = document.getElementById('home-products');
   if (!el) return;
   el.innerHTML = [TEAS[0], TEAS[1], TEAS[2], TEAS[4]].map(productCard).join('');
 }
-
 function renderShopProducts() {
   let filtered = TEAS;
   if (activeCat !== 'tutti') filtered = filtered.filter(t => t.cat === activeCat);
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
-    filtered = filtered.filter(t =>
-      t.name.toLowerCase().includes(q) ||
-      t.zh.includes(q) ||
-      t.desc.toLowerCase().includes(q) ||
-      t.aromas.some(a => a.toLowerCase().includes(q))
-    );
+    filtered = filtered.filter(t => t.name.toLowerCase().includes(q) || t.zh.includes(q) || t.desc.toLowerCase().includes(q) || t.aromas.some(a => a.toLowerCase().includes(q)));
   }
   const grid = document.getElementById('shop-products-grid');
   if (!grid) return;
-  grid.innerHTML = filtered.length
-    ? filtered.map(productCard).join('')
-    : '<p style="color:var(--text3);grid-column:1/-1;padding:20px 0;">Nessun tè trovato per questa ricerca.</p>';
+  grid.innerHTML = filtered.length ? filtered.map(productCard).join('') : '<p style="color:var(--text3);grid-column:1/-1;padding:20px 0;">Nessun tè trovato.</p>';
 }
-
 function renderAccProducts() {
   let filtered = ACCESSORIES;
   if (activeAccCat !== 'tutti') filtered = filtered.filter(a => a.cat === activeAccCat);
@@ -2273,7 +2815,6 @@ function renderAccProducts() {
   if (!grid) return;
   grid.innerHTML = filtered.map(productCard).join('');
 }
-
 function productCard(p) {
   const aromaHtml = p.aromas.slice(0,3).map(a => `<span class="aroma-pill">${a}</span>`).join('');
   return `
@@ -2293,11 +2834,7 @@ function productCard(p) {
       <p class="product-card-desc">${p.desc}</p>
       ${aromaHtml ? `<div class="product-card-aroma">${aromaHtml}</div>` : ''}
       <div class="product-card-footer">
-        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <meta itemprop="priceCurrency" content="EUR"/>
-          <meta itemprop="price" content="${p.price}"/>
-          €${p.price} <span>/ ${p.conf}</span>
-        </div>
+        <div class="product-price"><meta itemprop="priceCurrency" content="EUR"/><meta itemprop="price" content="${p.price}"/>€${p.price} <span>/ ${p.conf}</span></div>
         <button class="add-btn" onclick="event.stopPropagation();addToCartById(${p.id});this.textContent='Aggiunto';setTimeout(()=>this.textContent='Aggiungi',1800);">Aggiungi</button>
       </div>
     </div>
@@ -2311,30 +2848,23 @@ function switchShopTab(tab, btn) {
   activeShopTab = tab;
   document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  const foglie = document.getElementById('shop-foglie');
-  const acc = document.getElementById('shop-accessori');
-  if (foglie) foglie.style.display = tab === 'foglie' ? 'block' : 'none';
-  if (acc) acc.style.display = tab === 'accessori' ? 'block' : 'none';
+  const f = document.getElementById('shop-foglie'), a = document.getElementById('shop-accessori');
+  if (f) f.style.display = tab === 'foglie' ? 'block' : 'none';
+  if (a) a.style.display = tab === 'accessori' ? 'block' : 'none';
 }
-
 function filterCat(cat, btn) {
   activeCat = cat;
   document.querySelectorAll('#shop-foglie .filter-chip').forEach(c => c.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderShopProducts();
 }
-
 function filterAcc(cat, btn) {
   activeAccCat = cat;
   document.querySelectorAll('#shop-accessori .filter-chip').forEach(c => c.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderAccProducts();
 }
-
-function filterProducts(val) {
-  searchQuery = val;
-  renderShopProducts();
-}
+function filterProducts(val) { searchQuery = val; renderShopProducts(); }
 
 /* ============================================================
    MODAL
@@ -2358,57 +2888,104 @@ function openModal(id) {
   if (p.cultivar) metaItems.push(`<span class="modal-meta-item">Cultivar: ${p.cultivar}</span>`);
   document.getElementById('modal-meta').innerHTML = metaItems.join('');
   const aromasSec = document.getElementById('modal-aromas-section');
-  if (p.aromas && p.aromas.length) {
-    aromasSec.style.display = 'block';
-    document.getElementById('modal-aromas').innerHTML = p.aromas.map(a => `<span class="aroma-pill">${a}</span>`).join('');
-  } else { aromasSec.style.display = 'none'; }
+  if (p.aromas && p.aromas.length) { aromasSec.style.display = 'block'; document.getElementById('modal-aromas').innerHTML = p.aromas.map(a => `<span class="aroma-pill">${a}</span>`).join(''); }
+  else { aromasSec.style.display = 'none'; }
   const brewEl = document.getElementById('modal-brewing');
   if (p.brewing) {
     let html = '<p class="modal-section-title">Tecniche di infusione</p><div class="brewing-grid">';
     if (p.brewing.orientale) html += `<div class="brewing-card"><h5>Gong Fu Cha</h5><ul>${p.brewing.orientale.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
     if (p.brewing.occidentale) html += `<div class="brewing-card"><h5>Stile occidentale</h5><ul>${p.brewing.occidentale.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
     if (p.brewing.freddo) html += `<div class="brewing-card"><h5>Cold brew</h5><ul>${p.brewing.freddo.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
-    html += '</div>';
-    brewEl.innerHTML = html;
+    html += '</div>'; brewEl.innerHTML = html;
   } else { brewEl.innerHTML = ''; }
   const addBtn = document.getElementById('modal-add-btn');
   if (addBtn) addBtn.textContent = 'Aggiungi al carrello';
   document.getElementById('product-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function modalAddToCart() {
   if (!currentProductId) return;
   addToCartById(currentProductId);
   const btn = document.getElementById('modal-add-btn');
-  if (btn) {
-    btn.textContent = 'Aggiunto al carrello';
-    btn.style.background = 'var(--gold)';
-    setTimeout(() => { btn.textContent = 'Aggiungi al carrello'; btn.style.background = ''; }, 2200);
-  }
+  if (btn) { btn.textContent = 'Aggiunto al carrello'; btn.style.background = 'var(--gold)'; setTimeout(() => { btn.textContent = 'Aggiungi al carrello'; btn.style.background = ''; }, 2200); }
+}
+function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('open'); document.body.style.overflow = ''; }
+function handleModalClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+function openDeguModal() { document.getElementById('degu-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function openLegal(type) { const el = document.getElementById('legal-' + type); if (el) el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+
+/* ============================================================
+   BLOG
+============================================================ */
+function renderBlogList() {
+  const grid = document.getElementById('blog-grid');
+  if (!grid) return;
+  grid.innerHTML = ARTICLES.map(a => `
+    <article class="blog-card" onclick="openArticle(${a.id})" itemscope itemtype="https://schema.org/BlogPosting">
+      <div class="blog-card-thumb">
+        <div class="blog-card-thumb-char" style="color:var(--text);">${a.glyph}</div>
+        <span class="blog-card-cat" style="background:${a.catColor}">${a.cat}</span>
+      </div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta">
+          <span>${a.date}</span>
+          <span>${a.readTime} di lettura</span>
+        </div>
+        <h2 class="blog-card-title" itemprop="headline">${a.title}</h2>
+        <p class="blog-card-excerpt" itemprop="description">${a.excerpt}</p>
+        <div class="blog-card-footer">
+          <span class="blog-card-author">di <strong>${a.author}</strong></span>
+          <span class="blog-read-more">Leggi l'articolo →</span>
+        </div>
+      </div>
+    </article>
+  `).join('');
+  document.getElementById('blog-list-view').style.display = 'block';
+  document.getElementById('blog-article-view').style.display = 'none';
 }
 
-function closeModal(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.remove('open');
-  document.body.style.overflow = '';
+function openArticle(id) {
+  const a = ARTICLES.find(x => x.id === id);
+  if (!a) return;
+  currentArticleId = id;
+  document.getElementById('blog-list-view').style.display = 'none';
+  document.getElementById('blog-article-view').style.display = 'block';
+  document.getElementById('article-content').innerHTML = `
+    <button class="article-back" onclick="backToBlog()">← Torna al Blog</button>
+    <div class="article-header">
+      <span class="article-cat-badge" style="background:${a.catColor}">${a.cat}</span>
+      <h1 class="article-title">${a.title}</h1>
+      <div class="article-meta">
+        <span>di <strong>${a.author}</strong></span>
+        <span>${a.date}</span>
+        <span>${a.readTime} di lettura</span>
+      </div>
+    </div>
+    <div class="article-hero-thumb">
+      <div class="article-hero-glyph">${a.glyph}</div>
+    </div>
+    <div class="article-body">${a.content}</div>
+    <div class="article-cta">
+      <h3>Vuoi scoprire i tè di cui parla questo articolo?</h3>
+      <p>Vieni in negozio o ordinali online. Jun è a disposizione per guidarti nella scelta.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="navigate('shop')">Vai allo shop</button>
+        <button class="btn btn-ghost" onclick="navigate('degustazione')">Prenota degustazione</button>
+      </div>
+    </div>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function handleModalClick(e, id) {
-  if (e.target === document.getElementById(id)) closeModal(id);
+function backToBlog() {
+  document.getElementById('blog-list-view').style.display = 'block';
+  document.getElementById('blog-article-view').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function openDeguModal() {
-  document.getElementById('degu-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function openLegal(type) {
-  const el = document.getElementById('legal-' + type);
-  if (el) el.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
+/* ============================================================
+   NEWSLETTER + MISC
+============================================================ */
 function handleNewsletter(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button');
@@ -2424,11 +3001,9 @@ function handleNewsletter(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     ['product-modal','degu-modal','legal-privacy','legal-cookie'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.classList.remove('open');
+      var el = document.getElementById(id); if (el) el.classList.remove('open');
     });
-    closeCart();
-    document.body.style.overflow = '';
+    closeCart(); closeMobileMenu(); document.body.style.overflow = '';
   }
 });
 
