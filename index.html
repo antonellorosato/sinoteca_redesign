@@ -1163,7 +1163,7 @@ footer {
 
 .mobile-menu-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  z-index: 98; opacity: 0; pointer-events: none;
+  z-index: 102; opacity: 0; pointer-events: none;
   transition: opacity 0.3s; backdrop-filter: blur(4px);
 }
 .mobile-menu-overlay.open { opacity: 1; pointer-events: all; }
@@ -1172,7 +1172,7 @@ footer {
   position: fixed; top: 0; left: 0; bottom: 0;
   width: min(320px, 88vw);
   background: var(--bg2); border-right: 1px solid var(--border2);
-  z-index: 99; display: flex; flex-direction: column;
+  z-index: 103; display: flex; flex-direction: column;
   transform: translateX(-100%);
   transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
   overflow-y: auto;
@@ -1352,18 +1352,36 @@ footer {
 .blog-list-view { display: block; }
 .blog-list-view.hidden { display: none; }
 
+/* Responsive helper for inline 2-col grids */
+.resp-grid-2col { }
+
 /* ============================================================
-   RESPONSIVE — FULL MOBILE OVERHAUL
+   RESPONSIVE
 ============================================================ */
 @media (max-width: 960px) {
   /* Layout stacks */
   .hero, .archivio-grid, .degu-hero, .jun-hero,
   .modal-grid, .degu-booking-card,
   .contacts-grid { grid-template-columns: 1fr; }
-  /* Fix sections that have inline grid */
-  section [style*="grid-template-columns:1fr 1fr"],
-  div[style*="grid-template-columns:1fr 1fr"] {
+
+  /* Collapse all inline 2-col grids */
+  .resp-grid-2col {
     grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  section [style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr"],
+  section [style*="grid-template-columns: 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Normalize padding on all inline-padded section wrappers */
+  section[style*="padding"],
+  div[style*="padding:clamp"] {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
   .cat-map { grid-template-columns: repeat(2,1fr); }
   .values-grid { grid-template-columns: 1fr 1fr; }
@@ -1411,114 +1429,126 @@ footer {
 }
 
 @media (max-width: 600px) {
-  :root { --nav-h: 60px; }
+  :root { --nav-h: 60px; --cart-w: 100vw; }
 
   /* Typography */
-  h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
-  h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  h1 { font-size: clamp(2rem, 8vw, 3rem); }
+  h2 { font-size: clamp(1.5rem, 6vw, 2.2rem); }
   body { font-size: 17px; }
 
   /* Nav */
-  nav { padding: 0 16px; gap: 12px; }
-  .nav-logo { font-size: 1.4rem; }
-  .cart-btn { padding: 7px 12px; font-size: 0.82rem; }
+  nav { padding: 0 14px; gap: 8px; }
+  .nav-logo { font-size: 1.3rem; }
+  .cart-btn { padding: 7px 10px; font-size: 0.82rem; }
+  .cart-btn .cart-text { display: none; }
 
   /* Announcement */
-  .ann-bar { font-size: 0.78rem; padding: 8px 14px; }
+  .ann-bar { font-size: 0.76rem; padding: 8px 12px; }
+
+  /* Inline-padded sections: normalize horizontal padding */
+  section[style], div[style*="padding:clamp"], div[style*="padding: clamp"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Resp grids */
+  .resp-grid-2col {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
 
   /* Hero */
   .hero { grid-template-columns: 1fr; }
-  .hero-content { padding: 44px 20px; }
-  .hero-visual { min-height: 220px; }
-  .hero h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
-  .hero-sub { font-size: 1rem; }
+  .hero-content { padding: 40px 16px; }
+  .hero-visual { min-height: 200px; }
+  .hero h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); }
+  .hero-sub { font-size: 0.98rem; }
   .hero-ctas { flex-direction: column; gap: 10px; }
   .hero-ctas .btn { width: 100%; justify-content: center; }
 
   /* Sections */
-  .section { padding: 40px 16px; }
-  .section-header { margin-bottom: 32px; }
+  .section { padding: 36px 16px; }
+  .section-header { margin-bottom: 28px; }
 
-  /* Product grid */
+  /* Products & blog */
   .product-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: 1fr; }
 
   /* Cat map */
-  .cat-map { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cat-tile { padding: 18px 14px; }
-  .cat-tile-glyph { font-size: 1.6rem; }
-  .cat-tile-name { font-size: 1rem; }
+  .cat-map { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cat-tile { padding: 16px 12px; }
+  .cat-tile-glyph { font-size: 1.5rem; }
+  .cat-tile-name { font-size: 0.95rem; }
 
   /* Values */
   .values-grid { grid-template-columns: 1fr; }
 
-  /* Degu steps */
+  /* Degu */
   .degu-steps { grid-template-columns: 1fr; }
-  .degu-booking-card { padding: 28px 20px; }
-  .degu-booking-price { font-size: 3.5rem; }
+  .degu-booking-card { padding: 24px 16px; grid-template-columns: 1fr; }
+  .degu-booking-price { font-size: 3.2rem; }
 
-  /* Filter bar */
-  .filter-bar { gap: 7px; }
+  /* Filters */
+  .filter-bar { gap: 6px; }
   .search-bar { max-width: 100%; }
-  .filter-chip { font-size: 0.8rem; padding: 6px 14px; }
+  .filter-chip { font-size: 0.78rem; padding: 6px 12px; }
 
   /* Shop tabs */
   .shop-tabs { width: 100%; }
-  .shop-tab { flex: 1; padding: 12px 10px; font-size: 0.88rem; }
+  .shop-tab { flex: 1; padding: 12px 8px; font-size: 0.85rem; }
 
   /* Footer */
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .footer-links { flex-wrap: wrap; gap: 14px; }
+  .footer-links { flex-wrap: wrap; gap: 12px; }
 
-  /* Modal */
-  .modal { max-height: 95vh; border-radius: 14px 14px 0 0;
-           margin-bottom: 0; align-self: flex-end; }
+  /* Modal — bottom sheet */
+  .modal { max-height: 95vh; border-radius: 14px 14px 0 0; margin-bottom: 0; align-self: flex-end; }
   .modal-overlay { align-items: flex-end; padding: 0; }
   .modal-grid { grid-template-columns: 1fr; }
   .modal-visual { display: none; }
-  .modal-body { padding: 24px 20px 32px; }
-  .modal-price { font-size: 2rem; }
+  .modal-body { padding: 22px 16px 30px; }
+  .modal-price { font-size: 1.9rem; }
+  .brewing-grid { grid-template-columns: 1fr; }
 
-  /* Cart drawer */
-  :root { --cart-w: 100vw; }
-  .cart-drawer { border-left: none; border-top: 1px solid var(--border2);
-                  border-radius: 14px 14px 0 0; }
+  /* Cart drawer — full width */
+  .cart-drawer { border-left: none; border-top: 1px solid var(--border2); border-radius: 14px 14px 0 0; }
 
   /* Newsletter */
-  .newsletter { padding: 40px 20px; gap: 24px; }
+  .newsletter { padding: 36px 16px; gap: 20px; }
   .newsletter-form { flex-direction: column; }
   .newsletter-form input { min-width: auto; width: 100%; }
   .newsletter-form .btn { width: 100%; justify-content: center; }
 
-  /* Social grid */
+  /* Social */
   .social-grid { grid-template-columns: 1fr 1fr; }
 
   /* Contacts */
-  .contacts-hero { padding: 48px 20px 36px; }
-  .contacts-block { padding: 24px 20px; }
+  .contacts-hero { padding: 44px 16px 30px; }
+  .contacts-block { padding: 20px 16px; }
 
   /* Archivio */
-  .archivio-hero { padding: 44px 20px; }
-  .archivio-block { padding: 32px 20px; }
-  .archivio-full-bleed { padding: 44px 20px; }
+  .archivio-hero { padding: 40px 16px; }
+  .archivio-block { padding: 28px 16px; }
+  .archivio-full-bleed { padding: 40px 16px; }
 
   /* Jun Ge */
   .jun-hero { grid-template-columns: 1fr; }
-  .jun-visual { min-height: 240px; }
-  .jun-content { padding: 36px 20px; }
-  .jun-quote { font-size: 1.3rem; }
-  .jun-avatar { width: 140px; height: 140px; }
-  .jun-avatar-glyph { font-size: 3.5rem; }
+  .jun-visual { min-height: 220px; }
+  .jun-content { padding: 32px 16px; }
+  .jun-quote { font-size: 1.25rem; padding-left: 16px; }
+  .jun-avatar { width: 130px; height: 130px; }
+  .jun-avatar-glyph { font-size: 3.2rem; }
 
   /* Blog */
-  .article-view { padding: 32px 16px; }
-  .article-title { font-size: 1.8rem; }
-  .article-body { font-size: 0.96rem; }
+  .article-view { padding: 28px 16px; }
+  .article-title { font-size: 1.7rem; }
+  .article-body { font-size: 0.94rem; }
+  .article-hero-thumb { height: 180px; }
 
   /* Intro strip */
-  .intro-strip { padding: 40px 20px; }
-  .intro-strip-inner { grid-template-columns: 1fr; gap: 24px; }
+  .intro-strip { padding: 36px 16px; }
+  .intro-strip-inner { grid-template-columns: 1fr; gap: 22px; }
 }
 </style>
 </head>
@@ -1550,7 +1580,7 @@ footer {
     <li><a href="#" onclick="navigate('junge')" id="nav-junge">Jun Ge</a></li>
     <li><a href="#" onclick="navigate('contatti')" id="nav-contatti">Contatti</a></li>
     <li><a href="#" onclick="navigate('blog')" id="nav-blog">Blog</a></li>
-    <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida ↗</a></li>
+    <li><a href="https://antonellorosato.github.io/gongfuchaIT/" target="_blank" rel="noopener" style="color:var(--gold);">Guida ↗</a></li>
   </ul>
 
   <div class="nav-actions">
@@ -1559,7 +1589,7 @@ footer {
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambia tema"></button>
     </div>
     <button class="cart-btn" onclick="openCart()" aria-label="Carrello">
-      Carrello
+      <span class="cart-text">Carrello</span>
       <span class="cart-badge" id="cart-badge">0</span>
     </button>
     <button class="hamburger" id="hamburger" onclick="openMobileMenu()" aria-label="Menu">
@@ -1592,7 +1622,7 @@ footer {
     <li><a href="#" onclick="closeMobileMenu();navigate('junge');">Jun Ge</a></li>
     <li><a href="#" onclick="closeMobileMenu();navigate('blog');">Blog</a></li>
     <li><a href="#" onclick="closeMobileMenu();navigate('contatti');">Contatti</a></li>
-    <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
+    <li><a href="https://antonellorosato.github.io/gongfuchaIT/" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
   </ul>
   <div class="mobile-menu-footer">
     <div class="mobile-theme-row">
@@ -1797,7 +1827,7 @@ footer {
   </section>
 
   <section style="background:var(--bg3);border-top:1px solid var(--border);padding:clamp(60px,8vw,100px) clamp(20px,6vw,80px);">
-    <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+    <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;" class="resp-grid-2col">
       <div>
         <span class="section-label">Dove siamo</span>
         <h2 style="margin-bottom:18px;">Vieni a trovarci a Roma</h2>
@@ -1874,7 +1904,7 @@ footer {
         <div class="section-divider"></div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="resp-grid-2col">
 
         <!-- ── SPEDIZIONI ── -->
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:34px 32px;">
@@ -2076,7 +2106,7 @@ footer {
   </div>
 
   <section class="section">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:58px;align-items:center;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:58px;align-items:center;" class="resp-grid-2col">
       <div>
         <span class="section-label">L'origine</span>
         <h2 style="margin-bottom:16px;">Perché ho aperto Sinotèca?</h2>
@@ -2284,12 +2314,12 @@ footer {
       <h5>Esplora</h5>
       <ul>
         <li><a href="#" onclick="navigate('archivio')">L'Archivio del Tè</a></li>
-        <li><a href="#" onclick="navigate('shop','foglie')">Foglie di Tè</a></li>
+        <li><a href="#" onclick="navigate('shop')">Shop</a></li>
         <li><a href="#" onclick="navigate('shop','accessori')">Accessori</a></li>
         <li><a href="#" onclick="navigate('degustazione')">Degustazione</a></li>
         <li><a href="#" onclick="navigate('junge')">Jun Ge</a></li>
         <li><a href="#" onclick="navigate('blog')">Blog</a></li>
-        <li><a href="https://github.com/antonellorosato/gongfuchaIT" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
+        <li><a href="https://antonellorosato.github.io/gongfuchaIT/" target="_blank" rel="noopener" style="color:var(--gold);">Guida al Gong Fu Cha ↗</a></li>
       </ul>
     </div>
     <div class="footer-col">
